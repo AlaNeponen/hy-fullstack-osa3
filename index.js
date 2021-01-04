@@ -2,19 +2,15 @@ const { request, response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-require('dotenv').config()
-const Person = require('./models/person')
-const person = require('./models/person')
 const app = express()
 
 app.use(morgan('tiny'))
 app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
+require('dotenv').config()
+const Person = require('./models/person')
 
-const generateId = (max, min) => {
-  return Math.random() * (max - min) + min;
-}
 app.get(`/api/persons`, (request, response) => {
     Person.find({}).then(people => {
       response.json(people)
