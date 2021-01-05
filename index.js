@@ -11,32 +11,26 @@ app.use(express.static('build'))
 require('dotenv').config()
 const Person = require('./models/person')
 
-app.get(`/api/persons`, (request, response) => {
-    Person.find({}).then(people => {
-      response.json(people.map(person => person.toJSON()))
-    })
+app.get('/api/persons', (request, response) => {
+  Person.find({}).then(people => {
+    response.json(people.map(person => person.toJSON()))
+  })
 })
-app.get(`/api/persons/:id`, (request, response, next) => {
-    Person.findById(request.params.id).then(person => {
-      if (person) {
-        response.json(person.toJSON())
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => next(error))  
-})
-app.get(`/info`, (request, response) => {
-    const now = new Date().toUTCString()
-    const text = `Phonebook has info for ${persons.length} people <br/> ${now}`
-    response.send(text)
-    
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id).then(person => {
+    if (person) {
+      response.json(person.toJSON())
+    } else {
+      response.status(404).end()
+    }
+  })
+    .catch(error => next(error))
 })
 app.delete('/api/persons/:id', (request, response, next) => {
-  Person.findByIdAndDelete(request.params.id).then(result => {
+  Person.findByIdAndDelete(request.params.id).then(
     response.status(204).end()
-  })
-  .catch(error => next(error))
+  )
+    .catch(error => next(error))
 })
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
@@ -48,7 +42,7 @@ app.post('/api/persons', (request, response, next) => {
   person.save().then(savedPerson => {
     response.json(savedPerson.toJSON())
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -69,5 +63,5 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-    console.log(`server running on port ${PORT}`)
+  console.log(`server running on port ${PORT}`)
 })
